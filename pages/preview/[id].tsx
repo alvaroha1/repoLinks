@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import Link from 'next/link'
 
 function Preview() {
-  const { id } = useRouter().query;
+  const id = useRouter().query.id;
   console.log(id)
   useEffect(() => {
-    if (id) {
+    if (typeof id === "string") {
       const metadata = localStorage.getItem(id);
       console.log(metadata, "metadata from page")
     }
