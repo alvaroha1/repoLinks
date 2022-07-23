@@ -5,14 +5,15 @@ import Head from "next/head";
 import Image from "next/image";
 import { ChromePicker } from "react-color";
 import Footer from "../components/footer";
+import Label from "../components/label";
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<string>("user");
   const [repo, setRepo] = useState<string>("repository");
   const [color, setColor] = useState<string>("#000000");
   const repoId = useId();
-  const defaultURL = "https://api.github.com/repos/"
-  const [repoData, setRepoData] = useState<any>([])
+  const defaultURL = "https://api.github.com/repos/";
+  const [repoData, setRepoData] = useState<Repository>();
 
   const saveItem = () => {
     const item = {
@@ -21,11 +22,18 @@ const Home: NextPage = () => {
     localStorage.setItem(repoId, JSON.stringify(item));
   };
 
+  interface Repository {
+    id: number;
+    name: string;
+  }
+
   const fetchData = async (url: string) => {
     try {
       const data = await fetch(url);
       const json = await data.json();
-      console.log(json)
+      console.log(json);
+      setRepoData(json)
+
     } catch (error) {
       console.error(error);
     }
@@ -33,7 +41,7 @@ const Home: NextPage = () => {
 
   const handleButton = () => {
     fetchData(defaultURL + user + "/" + repo);
-  }
+  };
 
   console.log(color, repoId);
   return (
@@ -43,19 +51,13 @@ const Home: NextPage = () => {
         <meta name="description" content="Repository Link Generator" />
       </Head>
       <header className="flex flex-col bg-gray-100">
-      <h1 className="text-3xl p-8">Repository Link Generator</h1>
-
+        <h1 className="text-3xl p-8">Repository Link Generator</h1>
       </header>
       <main className="flex flex-col items-center justify-center bg-gray-100">
         <div className="bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
           <div className="space-y-6">
             <div>
-              <label
-                htmlFor="user"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Introduce the name of the user 
-              </label>
+              <Label text="Introduce the name of the user" htmlFor="user" />
               <input
                 type="text"
                 name="user"
@@ -68,12 +70,10 @@ const Home: NextPage = () => {
               />
             </div>
             <div>
-            <label
+              <Label
+                text="Introduce the name of the repository"
                 htmlFor="repo"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Introduce the name of the repository
-              </label>
+              />
               <input
                 type="text"
                 name="repo"
@@ -86,12 +86,7 @@ const Home: NextPage = () => {
               />
             </div>
             <div>
-            <label
-                htmlFor="url"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Current URL
-              </label>
+              <Label text="Current URL" htmlFor="url" />
               <input
                 type="url"
                 name="url"
@@ -103,41 +98,37 @@ const Home: NextPage = () => {
               />
             </div>
             <div className="flex justify-center">
-            <button
-              type="submit"
-              onClick={()=> handleButton()}
-              className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Fetch data from the repository
+              <button
+                type="submit"
+                onClick={() => handleButton()}
+                className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Fetch data from the repository
               </button>
-              </div>
+            </div>
           </div>
         </div>
         <div className=" bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
-        <label
-                htmlFor="color-picker"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Pick a color
-          </label>
+          <Label text="Pick a color" htmlFor="color-picker" />
           <div className="flex justify-center">
-          <ChromePicker
-            color={color}
-            onChange={(col) => setColor(col.hex)}
-            disableAlpha={true}
+            <ChromePicker
+              color={color}
+              onChange={(col) => setColor(col.hex)}
+              disableAlpha={true}
             />
-            </div>
+          </div>
         </div>
         <div className="flex justify-center bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
-  
           <Link href={`preview/${repoId}`}>
-            <button onClick={saveItem} className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            <button
+              onClick={saveItem}
+              className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
               Go to preview URL
             </button>
           </Link>
         </div>
       </main>
-
       <footer className="flex flex-row justify-center bg-gray-100">
         <Footer />
       </footer>
