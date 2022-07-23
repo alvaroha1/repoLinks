@@ -6,12 +6,12 @@ export default function Footer() {
   const github_link = "https://github.com/alvaroha1/repoLinks";
   const year = "© 2022";
   return (
-    <div>
-      <ul>
-        <li>
+    <div className="flex">
+      <ul className="flex items-center">
+        <li className="p-4">
           <h6>{author}</h6>
         </li>
-        <li>
+        <li className="p-4">
           <a
             rel="noopener noreferrer"
             target="_blank"
@@ -21,7 +21,7 @@ export default function Footer() {
             <GrMailOption />
           </a>
         </li>
-        <li>
+        <li className="p-4">
           <a
             rel="noopener noreferrer"
             target="_blank"
@@ -32,7 +32,7 @@ export default function Footer() {
           </a>
         </li>
 
-        <li>
+        <li className="p-4">
             {year} (
             <a
               rel="noopener noreferrer"
