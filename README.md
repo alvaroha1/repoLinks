@@ -1,21 +1,8 @@
 ## Task - Repository Link Preview | Frontend-Exercise
 ### Coding challenge
 
-**Description**
-
-
-**Requirements**
-
-
-**Nice to have**
-
-
 [Alvaro Hernandez](mailto:alvarohernandezassens@gmail.com)
-
 ## Proposed Solution
-
-
-
 
 ### [Click here to see the Live Demo](https://repo-links.vercel.app/)
 ## Screenshots
