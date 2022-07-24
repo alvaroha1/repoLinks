@@ -20,6 +20,7 @@ const Home: NextPage = () => {
     const item = {
       color,
       repoData,
+      url: defaultURL + user + "/" + repo
     };
     localStorage.setItem(repoId, JSON.stringify(item));
   };

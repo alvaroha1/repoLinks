@@ -3,25 +3,45 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Repository } from "../../types/Github";
-import Table from "../../components/table";
+import Label from "../../components/label";
 
 interface Metadata {
   color: string;
   repoData: Repository;
+  url: string;
+}
+
+interface Contributor {
+  login: string;
 }
 
 function Preview() {
   const id = useRouter().query.id;
   const [metadata, setMetadata] = useState<Metadata>();
+  const [contributors, setContributors] = useState<Contributor[]>([]);
+
+  const fetchData = async (url: string) => {
+    try {
+      const data = await fetch(url);
+      if (data.status === 200) {
+        const json = await data.json();
+        setContributors(json)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (typeof id === "string") {
       const data = localStorage.getItem(id);
-      console.log(data);
       if (typeof data === "string") {
         setMetadata(JSON.parse(data));
       }
     }
-    console.log(metadata);
+    if (metadata?.url) {
+      fetchData(metadata.url + "/contributors")
+    }
   }, []);
 
   return (
@@ -39,8 +59,7 @@ function Preview() {
         />
         <meta name="twitter:image" content="URL_FOR_YOUR_IMAGE" />
       </Head>
-      {/* style={{backgroundColor:`${metadata?.color}`, opacity: "0.2"}} */}
-      <main className="h-screen flex flex-col items-center justify-center bg-gray-100">
+      <main className="flex flex-col items-center justify-center bg-gray-100">
         <div className="bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
             <div
               className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
@@ -93,8 +112,14 @@ function Preview() {
                   </dt>
                   <dd className="text-xs text-gray-500">{metadata?.repoData.stargazers_count}</dd>
                 </div>
-              </dl>
+            </dl>
+            <div className="p-2">
+              <Label text="Top-10 Contributors in this repository" htmlFor="contributors" />
+            <ul>
+              {contributors.slice(0, 10).map(user => <li className="text-xs text-gray-500 p-1">{user.login}</li>)}
+              </ul>
             </div>
+          </div>
         </div>
 
         <div className="flex justify-center bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
