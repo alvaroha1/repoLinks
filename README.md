@@ -20,8 +20,8 @@
 ### [Click here to see the Live Demo](https://repo-links.vercel.app/)
 ## Screenshots
 
-![Main](assets/Screenshot-1.png)
-![Main-2](assets/Screenshot-2.png)
+![Main](assets/Screenshot1.png)
+![Main-2](assets/Screenshot2.png)
 
 ## Libraries / Tools Used
 
@@ -49,3 +49,7 @@ You can run the unit tests using:
 
 ## Future Work
 
+- Input Data validation.
+- Add spinners and animations (e.g. after fetching data).
+- Display success and error messages properly.
+- Add testing with Jest and React-Testing-Library.

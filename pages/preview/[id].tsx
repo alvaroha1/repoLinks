@@ -41,11 +41,14 @@ function Preview() {
         setMetadata(JSON.parse(data));
       }
     }
+  }, []);
+
+  useEffect(() => {
     console.log(metadata)
     if (metadata?.url) {
       fetchData(metadata.url + "/contributors")
     }
-  }, []);
+  }, [metadata]);
 
   return (
     <>
