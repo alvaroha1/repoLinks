@@ -45,7 +45,7 @@ function Preview() {
   }, []);
 
   return (
-    <div>
+    <>
       <Head>
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -113,12 +113,13 @@ function Preview() {
                   <dd className="text-xs text-gray-500">{metadata?.repoData.stargazers_count}</dd>
                 </div>
             </dl>
-            <div className="p-2">
+            {contributors.length > 0 ?     <div className="p-2">
               <Label text="Top-10 Contributors in this repository" htmlFor="contributors" />
             <ul>
-              {contributors.slice(0, 10).map(user => <li className="text-xs text-gray-500 p-1">{user.login}</li>)}
+                {contributors.slice(0, 10).map(user => <li key={user.login} className="text-xs text-gray-500 p-1">{user.login}</li>)}
               </ul>
-            </div>
+            </div> : null}
+        
           </div>
         </div>
 
@@ -130,7 +131,7 @@ function Preview() {
           </Link>
         </div>
       </main>
-    </div>
+    </>
   );
 }
 
