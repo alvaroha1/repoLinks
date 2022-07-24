@@ -28,12 +28,6 @@ And to run the app:
 
 `npm start` or `yarn start`
 
-## Running the tests
-
-You can run the unit tests using:
-
-`npm test` or `yarn test`
-
 ## Future Work
 
 - Input Data validation.
