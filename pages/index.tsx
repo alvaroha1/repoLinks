@@ -6,6 +6,9 @@ import { ChromePicker } from "react-color";
 import Footer from "../components/footer";
 import Label from "../components/label";
 import { Repository } from "../types/Github";
+import dynamic from "next/dynamic";
+import { IEmojiData } from "../types/Emoji";
+const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<string>("user");
@@ -13,14 +16,20 @@ const Home: NextPage = () => {
   const [color, setColor] = useState<string>("#000000");
   const [disabled, setDisabled] = useState<boolean>(true);
   const [repoData, setRepoData] = useState<Repository>();
+  const [chosenEmoji, setChosenEmoji] = useState<IEmojiData>();
   const repoId = useId();
   const defaultURL = "https://api.github.com/repos/";
+
+  const onEmojiClick = (event: React.MouseEvent, emojiObject: IEmojiData) => {
+    setChosenEmoji(emojiObject);
+  };
 
   const saveItem = () => {
     const item = {
       color,
       repoData,
-      url: defaultURL + user + "/" + repo
+      url: defaultURL + user + "/" + repo,
+      chosenEmoji
     };
     localStorage.setItem(repoId, JSON.stringify(item));
   };
@@ -30,7 +39,7 @@ const Home: NextPage = () => {
       const data = await fetch(url);
       if (data.status === 200) {
         const json = await data.json();
-        setRepoData(json)
+        setRepoData(json);
         setDisabled(false);
       }
     } catch (error) {
@@ -114,6 +123,17 @@ const Home: NextPage = () => {
               onChange={(col) => setColor(col.hex)}
               disableAlpha={true}
             />
+          </div>
+        </div>
+        <div className=" bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">
+          <Label text="Pick a emoji" htmlFor="emoji-picker" />
+          <div className="flex justify-center flex-col items-center">
+            {chosenEmoji ? (
+              <span>Emoji Selected: {chosenEmoji.emoji}</span>
+            ) : (
+              <span>No emoji Selected</span>
+            )}
+            <Picker onEmojiClick={onEmojiClick} />
           </div>
         </div>
         <div className="flex justify-center bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 m-2 w-3/5">

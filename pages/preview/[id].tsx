@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Repository } from "../../types/Github";
 import Label from "../../components/label";
+import { IEmojiData } from "../../types/Emoji";
 
 interface Metadata {
   color: string;
   repoData: Repository;
   url: string;
+  chosenEmoji: IEmojiData;
 }
 
 interface Contributor {
@@ -39,6 +41,7 @@ function Preview() {
         setMetadata(JSON.parse(data));
       }
     }
+    console.log(metadata)
     if (metadata?.url) {
       fetchData(metadata.url + "/contributors")
     }
@@ -111,6 +114,13 @@ function Preview() {
                     Stars
                   </dt>
                   <dd className="text-xs text-gray-500">{metadata?.repoData.stargazers_count}</dd>
+              </div>
+              
+              <div className="flex flex-col-reverse p-4">
+                  <dt className="text-sm font-medium text-gray-600">
+                    Emoji Selected
+                  </dt>
+                  <dd className="text-xs text-gray-500">{metadata?.chosenEmoji.emoji}</dd>
                 </div>
             </dl>
             {contributors.length > 0 ?     <div className="p-2">
