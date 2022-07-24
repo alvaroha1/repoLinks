@@ -1,39 +1,37 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useState, useId, useEffect } from "react";
+import { useState, useId } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { ChromePicker } from "react-color";
 import Footer from "../components/footer";
 import Label from "../components/label";
+import { Repository } from "../types/Github";
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<string>("user");
   const [repo, setRepo] = useState<string>("repository");
   const [color, setColor] = useState<string>("#000000");
+  const [disabled, setDisabled] = useState<boolean>(true);
+  const [repoData, setRepoData] = useState<Repository>();
   const repoId = useId();
   const defaultURL = "https://api.github.com/repos/";
-  const [repoData, setRepoData] = useState<Repository>();
 
   const saveItem = () => {
     const item = {
       color,
+      repoData,
     };
     localStorage.setItem(repoId, JSON.stringify(item));
   };
 
-  interface Repository {
-    id: number;
-    name: string;
-  }
-
   const fetchData = async (url: string) => {
     try {
       const data = await fetch(url);
-      const json = await data.json();
-      console.log(json);
-      setRepoData(json)
-
+      if (data.status === 200) {
+        const json = await data.json();
+        setRepoData(json)
+        setDisabled(false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -43,7 +41,6 @@ const Home: NextPage = () => {
     fetchData(defaultURL + user + "/" + repo);
   };
 
-  console.log(color, repoId);
   return (
     <div>
       <Head>
@@ -122,7 +119,8 @@ const Home: NextPage = () => {
           <Link href={`preview/${repoId}`}>
             <button
               onClick={saveItem}
-              className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              disabled={disabled}
+              className="w-3/5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-25"
             >
               Go to preview URL
             </button>
